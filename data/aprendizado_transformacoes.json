@@ -1,0 +1,69 @@
+{
+  "transformacoes_nomenclatura": {
+    "K-IGN-CA1": "IGN-CA1",
+    "K-AT-1A": "AT-1",
+    "K-AT-1F": "AT-1",
+    "K-AT-2A": "AT-2",
+    "K-AT-2F": "AT-2",
+    "K-AT-3A": "AT-3",
+    "K-AT-3F": "AT-3",
+    "K-AT-4A": "AT-4",
+    "K-AT-4F": "AT-4",
+    "K-AT-5A": "AT-5",
+    "K-AT-5F": "AT-5",
+    "K-AT-6A": "AT-6",
+    "K-AT-6F": "AT-6",
+    "K-FDC-2": "FDC-2"
+  },
+  "transformacoes_anilha": {
+    "K-AT-1A|1A-CT-1.12": "1A-AT-1.1",
+    "K-AT-1F|1A-CT-1.13": "1A-AT-1.2",
+    "K-AT-2A|1A-CT-1.14": "1A-AT-2.1",
+    "K-AT-2F|1A-CT-1.15": "1A-AT-2.2",
+    "K-AT-3A|1A-CT-1.16": "1A-AT-3.1",
+    "K-AT-3F|1A-CT-2.1": "1A-AT-3.2",
+    "K-AT-4A|1A-CT-2.2": "1A-AT-4.1",
+    "K-AT-4F|1A-CT-2.3": "1A-AT-4.2",
+    "K-AT-5A|1A-CT-2.4": "1A-AT-5.1",
+    "K-AT-5F|1A-CT-2.5": "1A-AT-5.2",
+    "K-AT-6A|1A-CT-2.6": "1A-AT-6.1",
+    "K-AT-6F|1A-CT-2.7": "1A-AT-6.2"
+  },
+  "expansoes": {
+    "AT-1": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    },
+    "AT-2": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    },
+    "AT-3": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    },
+    "AT-4": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    },
+    "AT-5": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    },
+    "AT-6": {
+      "count_hb": 2,
+      "count_ref": 4,
+      "fator": 2.0
+    }
+  },
+  "campos_novos": [
+    "BORNE",
+    "CABEAMENTO"
+  ],
+  "versao": "2.0"
+}

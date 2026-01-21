@@ -1,0 +1,228 @@
+{
+  "version": "1.0",
+  "descricao": "Padrões elétricos aprendidos automaticamente",
+  "padroes_expansao": {
+    "DESP-1": {
+      "tipo": "borne_multiplicado",
+      "linhas_base": 3,
+      "linhas_total": 12,
+      "cartoes": [
+        {
+          "template": "Despeliculadora {i}",
+          "range": [
+            1,
+            3
+          ]
+        },
+        {
+          "template": "Despeliculadora {i} Borne Rele 8",
+          "range": [
+            1,
+            3
+          ],
+          "sem_anilha": true
+        },
+        {
+          "template": "Despeliculadora {i} Borne Rele 9",
+          "range": [
+            1,
+            3
+          ],
+          "sem_anilha": true
+        },
+        {
+          "template": "Despeliculadora {i} Borne  0V2",
+          "range": [
+            1,
+            3
+          ],
+          "sem_anilha": true
+        }
+      ]
+    },
+    "DESP-2": {
+      "tipo": "borne_multiplicado",
+      "linhas_base": 2,
+      "linhas_total": 5,
+      "cartoes": [
+        "Despeliculadora 4",
+        "Autorização Despeliculadora",
+        {
+          "template": "Despeliculadora 4 Borne Rele 8",
+          "sem_anilha": true
+        },
+        {
+          "template": "Despeliculadora 4 Borne Rele 9",
+          "sem_anilha": true
+        },
+        {
+          "template": "Despeliculadora 4 Borne  0V2",
+          "sem_anilha": true
+        }
+      ]
+    },
+    "ACT-RES-1": {
+      "tipo": "replicacao",
+      "linhas": 6,
+      "cartoes": [
+        {
+          "template": "Acionamento Reserva {i}",
+          "range": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    "ACT-RES-2": {
+      "tipo": "replicacao",
+      "linhas": 2,
+      "cartoes": [
+        {
+          "template": "Acionamento Reserva {i}",
+          "range": [
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    "SENS-EL": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 2,
+      "numeros": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cartoes": [
+        {
+          "template": "K-EL-{num}",
+          "sem_anilha": true
+        },
+        {
+          "template": "Módulo de freio do motor (EL-{num})",
+          "sem_anilha": true
+        }
+      ]
+    },
+    "IF-RES": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 3,
+      "cartoes": [
+        {
+          "template": "Inversor Reserva {num}"
+        },
+        {
+          "template": "Inversor Reserva {num} (POSITIVO)"
+        },
+        {
+          "template": "Inversor Reserva {num} (NEGATIVO)"
+        }
+      ]
+    },
+    "VAL-GAS-CA": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 2,
+      "cartoes": [
+        {
+          "template": "Servo Gás Câmara {num}"
+        },
+        {
+          "template": "Servo Gás Câmara {num}"
+        }
+      ]
+    },
+    "AUT-EST": {
+      "tipo": "fixo",
+      "linhas": 3,
+      "cartoes": [
+        "Autorização Esteira",
+        {
+          "template": "Autorização Esteira Borne Saida",
+          "sem_anilha": true
+        },
+        "Autorização Sirene"
+      ]
+    },
+    "IGN-CA": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 2,
+      "cartoes": [
+        {
+          "template": "Ignição Camara {num}"
+        },
+        {
+          "template": "Reset Ignição  Camara {num}"
+        }
+      ]
+    },
+    "IF-PC": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 5,
+      "cartoes": [
+        "Porta Carga (Forno)",
+        "Porta Carga (Máximo)",
+        "Porta Carga (Mínimo)",
+        "Porta Carga(Positivo)",
+        "Porta Carga(Negativo)"
+      ]
+    },
+    "IF-E": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 3,
+      "cartoes": [
+        "Esteira (Forno)",
+        "Esteira (Positivo)",
+        "Esteira(Negativo)"
+      ]
+    },
+    "FT-AT": {
+      "tipo": "fixo",
+      "linhas": 1,
+      "cartoes": [
+        "Acionamento Contator da Fonte"
+      ]
+    },
+    "AT": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 4,
+      "descricoes": [
+        "K-AT-{num}A",
+        "K-AT-{num}F",
+        "Atuador {num}",
+        "Atuador {num}"
+      ]
+    },
+    "PIS": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 3,
+      "descricoes": [
+        "R{num}A",
+        "R{num}F",
+        "Acionamento / Status Registro {num} Abre / Fecha"
+      ]
+    },
+    "MT-RES": {
+      "tipo": "para_cada_numero",
+      "linhas_por_item": 2,
+      "descricoes": [
+        "Motor Reserva {num} (DM)",
+        "Motor Reserva {num} (CONTATOR)"
+      ]
+    }
+  },
+  "mapeamentos_nomenclatura": {
+    "ACIONAMENTO RESERVA": "ACT-RES",
+    "INVERSOR RESERVA": "IF-RES",
+    "SENSOR ELEVADOR": "SENS-EL",
+    "ELEVADOR": "SENS-EL",
+    "VALVULA GAS": "VAL-GAS-CA",
+    "SERVO GAS": "VAL-GAS-CA",
+    "FOTOCELULA": "FT-AT",
+    "AUTORIZACAO ESTEIRA": "AUT-EST",
+    "IGNICAO CAMARA": "IGN-CA"
+  }
+}

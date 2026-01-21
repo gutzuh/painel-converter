@@ -1,0 +1,132 @@
+# Configuração do Sistema de Aprendizado Automático
+# 
+# Este arquivo controla como o sistema aprende e aplica padrões de expansão
+
+aprendizado:
+  # Modo de operação:
+  #   - conservador: Só aplica padrões com 100% de confiança
+  #   - balanceado: Aplica padrões com 80%+ de confiança
+  #   - agressivo: Aplica padrões com 60%+ de confiança
+  modo: conservador
+  
+  # Se deve aprender novos padrões automaticamente quando há arquivo de referência
+  auto_aprender: true
+  
+  # Se deve salvar padrões aprendidos para uso futuro
+  salvar_padroes: true
+  
+  # Mínimo de exemplos para considerar um padrão válido
+  min_exemplos: 2
+  
+  # Confiança mínima (0.0 a 1.0) para aplicar padrão
+  confianca_minima:
+    conservador: 1.0
+    balanceado: 0.8
+    agressivo: 0.6
+
+expansoes:
+  # Controle fino de cada tipo de expansão
+  # enabled: true/false - ativa/desativa
+  # confianca: 0.0-1.0 - confiança neste padrão específico
+  
+  atuadores:
+    enabled: true
+    confianca: 1.0
+    descricao: "Atuadores geram 4 linhas (K-AT-XA, K-AT-XF, Atuador X, Atuador X)"
+  
+  pistoes:
+    enabled: true
+    confianca: 1.0
+    descricao: "Pistões geram 3 linhas (RXA, RXF, Registro X Abre/Fecha)"
+  
+  motores_reserva:
+    enabled: true
+    confianca: 1.0
+    descricao: "Motores Reserva geram 2 linhas (DM, CONTATOR)"
+  
+  despeliculadoras:
+    enabled: true
+    confianca: 1.0
+    desp_1:
+      linhas: 12
+      descricao: "DESP-1: 3 base (Desp 1,2,3) + 9 bornes"
+    desp_2:
+      linhas: 5
+      descricao: "DESP-2: 2 base (Desp 4, Autorização) + 3 bornes"
+  
+  inversores_porta_carga:
+    enabled: true
+    confianca: 1.0
+    linhas: 5
+    descricao: "IF-PC-1: 5 linhas (Forno, Máximo, Mínimo, Positivo, Negativo)"
+  
+  inversores_esteira:
+    enabled: true
+    confianca: 1.0
+    linhas: 3
+    descricao: "IF-E-1: 3 linhas (Forno, Positivo, Negativo)"
+  
+  autorizacao_esteira:
+    enabled: true
+    confianca: 1.0
+    linhas: 3
+    descricao: "AUT-EST: 3 linhas (Autorização, Borne, Sirene)"
+  
+  ignicao_camara:
+    enabled: true
+    confianca: 1.0
+    linhas: 2
+    descricao: "IGN-CA-X: 2 linhas (Ignição, Reset)"
+
+# Padrões adicionais (antes estavam desabilitados, agora ativados)
+padroes_adicionais:
+  acionamento_reserva:
+    enabled: true
+    confianca: 1.0
+    act_res_1:
+      linhas: 6
+      descricao: "ACT-RES-1: 6 linhas (Acionamento Reserva 1-6)"
+    act_res_2:
+      linhas: 2
+      descricao: "ACT-RES-2: 2 linhas (Acionamento Reserva 7-8)"
+  
+  sensores_elevador:
+    enabled: true
+    confianca: 1.0
+    linhas: 2
+    descricao: "SENS-EL-X: 2 linhas por sensor (K-EL-X, Módulo freio EL-X)"
+  
+  inversor_reserva:
+    enabled: true
+    confianca: 1.0
+    linhas: 3
+    descricao: "IF-RES-1: 3 linhas (base, POSITIVO, NEGATIVO)"
+  
+  valvula_gas:
+    enabled: true
+    confianca: 1.0
+    linhas: 2
+    descricao: "VAL-GAS-CA-1: 2 linhas"
+  
+  fotocelula_atuadores:
+    enabled: true
+    confianca: 1.0
+    linhas: 1
+    descricao: "FT-AT: 1 linha"
+
+# Filtros de qualidade
+qualidade:
+  # Remove cabeçalhos duplicados "NOMENCLATURA"
+  remover_cabecalhos_duplicados: true
+  
+  # Mantém linhas sem nomenclatura (podem ter outros dados importantes)
+  manter_linhas_vazias: true
+  
+  # Remove apenas nomenclaturas que são duplicatas conhecidas de expansões
+  remover_duplicatas:
+    - DESP  # Sem número - é duplicata de DESP-1 ou DESP-2
+    - FDC-2  # Duplicata de outro padrão
+  
+  # Normaliza variações de nomenclatura
+  normalizar:
+    "IGN-CA1": "IGN-CA-1"  # Adiciona hífen faltante

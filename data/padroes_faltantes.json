@@ -1,0 +1,52 @@
+[
+  {
+    "nomenclatura": "ACT-RES-1",
+    "count_ref": 6,
+    "count_gen": 0,
+    "diferenca": 6,
+    "exemplo_descricao": "Acionamento Reserva 1",
+    "exemplo_cartao": "16-DO-P05",
+    "exemplo_borne": "100 A",
+    "exemplo_fusivel": "F20"
+  },
+  {
+    "nomenclatura": "ACT-RES-2",
+    "count_ref": 2,
+    "count_gen": 0,
+    "diferenca": 2,
+    "exemplo_descricao": "Acionamento Reserva 7",
+    "exemplo_cartao": "16-DO-P05",
+    "exemplo_borne": "103 A",
+    "exemplo_fusivel": "F21"
+  },
+  {
+    "nomenclatura": "FT-AT",
+    "count_ref": 1,
+    "count_gen": 0,
+    "diferenca": 1,
+    "exemplo_descricao": "Acionamento Contator da Fonte",
+    "exemplo_cartao": "16-DO-P05",
+    "exemplo_borne": NaN,
+    "exemplo_fusivel": "F7...F16"
+  },
+  {
+    "nomenclatura": "IF-RES-1",
+    "count_ref": 3,
+    "count_gen": 0,
+    "diferenca": 3,
+    "exemplo_descricao": "Inversor Reserva 1",
+    "exemplo_cartao": "16-DO-P05",
+    "exemplo_borne": NaN,
+    "exemplo_fusivel": NaN
+  },
+  {
+    "nomenclatura": "VAL-GAS-CA-1",
+    "count_ref": 2,
+    "count_gen": 0,
+    "diferenca": 2,
+    "exemplo_descricao": "Servo Gás Câmara 1",
+    "exemplo_cartao": "8-AO-U2",
+    "exemplo_borne": "x17B",
+    "exemplo_fusivel": "F7...F16"
+  }
+]

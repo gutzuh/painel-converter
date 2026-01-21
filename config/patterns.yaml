@@ -1,0 +1,370 @@
+# Configurações do Conversor HB → Painel CCM
+# Versão: 2.0 - Sistema Adaptável
+# Autor: J.Cortiça Automação Industrial
+
+# =============================================================================
+# MODO DE OPERAÇÃO
+# =============================================================================
+mode:
+  # auto_learn: Aprende padrões automaticamente de arquivo de referência
+  # manual: Usa apenas padrões definidos manualmente neste arquivo
+  learning_mode: auto_learn
+  
+  # Arquivo de referência para aprendizado (opcional)
+  reference_file: null  # Ex: "Painel - referncia.xlsx"
+  
+  # Aplicar transformações aprendidas
+  apply_learned_patterns: true
+
+# =============================================================================
+# MAPEAMENTO DE COLUNAS
+# =============================================================================
+column_mapping:
+  # Colunas do arquivo HB → Colunas do arquivo Painel
+  acionamento:
+    NOMENCLATURA: NOMENCLATURA
+    DESCRIÇÃO: DESCRICAO
+    CARTÃO: CARTAO
+    ANILHA 1: ANILHA-CARTAO
+    ANILHA 2: ANILHA-RELE
+    RELE: RELE
+    CV: CAVALO
+    BORNE: BORNE
+    
+  status:
+    NOMENCLATURA: NOMENCLATURA
+    DESCRIÇÃO: DESCRICAO
+    CARTÃO: CARTAO
+    ANILHA: ANILHA-CARTAO
+    BORNE: BORNE
+
+# =============================================================================
+# PADRÕES DE NOMENCLATURA
+# =============================================================================
+nomenclatura:
+  # Prefixos a remover
+  remove_prefixes:
+    - "K-"
+    - "M-"
+    - "RL-"
+    - "CMD-"
+  
+  # Sufixos de direção a remover (para atuadores)
+  direction_suffixes:
+    pattern: "^(AT-\\d+)[AF]$"
+    remove: true
+  
+  # Mapeamento de nomenclaturas específicas
+  # formato: nomenclatura_origem: nomenclatura_destino
+  specific_mappings:
+    # Soft Starters
+    "CIC-1": "SS-CIC-1"
+    "VA-1-CA1": "SS-VA-1-CA1"
+    "VA-2-CA1": "SS-VA-2-CA1"
+    "VR-1-CR-1": "SS-VR-1-CR-1"
+    "VR-2-CR-1": "SS-VR-2-CR-1"
+    "VE-1-CA1": "SS-VE-1-CA1"
+    "VE-2-CA1": "SS-VE-2-CA1"
+    
+    # Inversores de Frequência
+    "PC-1": "IF-PC-1"
+    "E-1": "IF-E-1"
+    "BC-1": "IF-BC-1"
+    
+    # Equipamentos especiais
+    "EF-CA1": "EF-CA1"
+    "VQ-CA1": "VQ-CA1"
+  
+  # Padrões para identificar tipo de equipamento
+  equipment_patterns:
+    motor:
+      - "^M-"
+      - "MOTOR"
+      - "VENTILADOR"
+      - "BOMBA"
+      - "ROSCA"
+      - "EXAUSTOR"
+    atuador:
+      - "^AT-"
+      - "ATUADOR"
+      - "VALVULA"
+    soft_starter:
+      - "^SS-"
+      - "SOFT"
+    inversor:
+      - "^IF-"
+      - "INVERSOR"
+      - "VFD"
+
+# =============================================================================
+# PADRÕES ADAPTATIVOS (AUTO-APRENDIZADO)
+# =============================================================================
+adaptive_patterns:
+  # Transformações de ANILHA detectadas automaticamente
+  anilha_transforms:
+    enabled: true
+    # Padrão: Se encontrar "1A-CT-X.Y" no HB, transformar para "1A-AT-X.Y"
+    rules:
+      - pattern: "1A-CT-{N}.{S}"
+        transform: "1A-AT-{N}.{S}"
+        description: "Transforma código de cartão (CT) para atuador (AT)"
+  
+  # Fórmulas para campos calculados
+  calculated_fields:
+    BORNE:
+      enabled: true
+      # Fórmula: BORNE = x{19+N}{SUFFIX}
+      # N = número extraído da nomenclatura
+      # SUFFIX = letra final (A, F, etc)
+      formula: "x{19+N}{SUFFIX}"
+      description: "Calcula BORNE baseado no número do equipamento"
+      applies_to:
+        - "AT-*"  # Atuadores
+  
+  # Regras de expansão automática
+  expansion_rules:
+    enabled: true
+    # Define quantas linhas gerar para cada tipo de equipamento
+    rules:
+      AT:  # Atuadores
+        # 1 linha HB com sufixo A/F -> 4 linhas no painel
+        # 2 linhas comando (K-AT-XA, K-AT-XF) + 2 linhas equipamento
+        from_hb_lines: 2
+        to_panel_lines: 4
+        pattern: "K-AT-{N}{SUFFIX}"
+        generates:
+          - nomenclature: "K-AT-{N}A"
+            tipo: "Contator"
+            anilha_cartao: "1A-AT-{N}.1"
+            borne: "x{19+N}A"
+          - nomenclature: "K-AT-{N}F"
+            tipo: "Contator"
+            anilha_cartao: "1A-AT-{N}.2"
+            borne: "x{19+N}B"
+          - nomenclature: "AT-{N}"
+            tipo: "Atuador"
+            anilha_cartao: "FROM_HB_LINE_1"  # Usa ANILHA do HB
+            borne: ""
+          - nomenclature: "AT-{N}"
+            tipo: "Atuador"
+            anilha_cartao: "FROM_HB_LINE_2"  # Usa ANILHA do HB
+            borne: ""
+
+# =============================================================================
+# MAPEAMENTO DE CARTÕES I/O
+# =============================================================================
+cartao:
+  # Mapeamento de códigos - sempre com sufixo completo
+  mapping:
+    "16 DO": "16-DO-P05"
+    "16DO": "16-DO-P05"
+    "16-DO": "16-DO-P05"
+    "20 DI PF": "20-DI-PF"
+    "20 DI PCNT": "20-DI-PCNT"
+    "20DI PF": "20-DI-PF"
+    "20DI": "20-DI-PF"
+    "20 DI": "20-DI-PF"
+    "20-DI": "20-DI-PF"
+    "4 AI PTNI": "4-AI-PTNI"
+    "4 AI": "4-AI-PTNI"
+    "4AI": "4-AI-PTNI"
+    "4-AI": "4-AI-PTNI"
+    "8 AO U2": "8-AO-U2"
+    "8 AO": "8-AO-U2"
+    "8AO": "8-AO-U2"
+    "8-AO": "8-AO-U2"
+    "4 AO": "4-AO-U1"
+    "4AO": "4-AO-U1"
+  
+  # Sufixos padrão por tipo de cartão
+  default_suffixes:
+    DO: "P05"
+    DI: "PF"
+    AI: "PTNI"
+    AO: "U2"
+  
+  # Regex para extração
+  extraction_patterns:
+    - pattern: "(\\d+)\\s*(DO|DI|AI|AO)"
+      format: "{0}-{1}"
+
+# =============================================================================
+# TABELA DE CABEAMENTO POR POTÊNCIA (CV)
+# =============================================================================
+cabeamento:
+  # Mapeamento CV → Cabo
+  por_cv:
+    0.5: "Cabo PP 4x1,5mm²"
+    0.75: "Cabo PP 4x1,5mm²"
+    1.0: "Cabo PP 4x1,5mm²"
+    1.5: "Cabo PP 4x2,5mm²"
+    2.0: "Cabo PP 4x2,5mm²"
+    3.0: "Cabo PP 4x2,5mm²"
+    4.0: "Cabo PP 4x2,5mm²"
+    5.0: "Cabo PP 4x2,5mm²"
+    5.5: "Cabo PP 4x2,5mm²"
+    7.5: "Cabo PP 4x4mm²"
+    10.0: "Cabo PP 4x4mm²"
+    12.5: "Cabo PP 4x4mm²"
+    15.0: "Cabo PP 4x6mm²"
+    20.0: "Cabo PP 4x6mm²"
+    25.0: "Cabo PP 4x10mm²"
+    30.0: "Cabo PP 4x10mm²"
+    40.0: "Cabo PP 4x16mm²"
+    50.0: "Cabo PP 4x16mm²"
+    60.0: "Cabo PP 4x25mm²"
+    75.0: "Cabo PP 4x35mm²"
+    100.0: "Cabo PP 4x50mm²"
+  
+  # Regras especiais
+  especiais:
+    inversor:
+      tipo: "blindado"
+      sufixo: " Blindado"
+    soft_starter:
+      bypass: true
+      nota: "Verificar conexão de bypass"
+
+# =============================================================================
+# FUSÍVEIS
+# =============================================================================
+fusivel:
+  # Mapeamento por faixa de CV
+  por_cv:
+    - cv_max: 2.0
+      fusivel: "F1...F6"
+    - cv_max: 5.5
+      fusivel: "F7...F16"
+    - cv_max: 12.5
+      fusivel: "F17...F26"
+    - cv_max: 25.0
+      fusivel: "F27...F36"
+    - cv_max: 50.0
+      fusivel: "F37...F46"
+  
+  # Default
+  default: "F7...F16"
+
+# =============================================================================
+# BORNES
+# =============================================================================
+borne:
+  # Formato de geração automática
+  auto_generate:
+    enabled: true
+    format: "X{:02d}"
+    start: 1
+  
+  # Agrupamento por tipo
+  grupos:
+    alimentacao:
+      prefixo: "X"
+      range: [1, 20]
+    controle:
+      prefixo: "Y"
+      range: [1, 50]
+    sinal:
+      prefixo: "Z"
+      range: [1, 30]
+
+# =============================================================================
+# ESTRUTURA DO ARQUIVO DE SAÍDA
+# =============================================================================
+output:
+  # Abas a serem geradas
+  sheets:
+    - name: "Descrição de Projeto CCM-{painel}"
+      columns:
+        - NOMENCLATURA
+        - PAGINA REFERENCIA
+      source: unique_nomenclaturas
+      
+    - name: "Acionamento CCM-{painel}"
+      columns:
+        - NOMENCLATURA
+        - TIPO
+        - DESCRICAO
+        - CARTAO
+        - ANILHA-CARTAO
+        - ANILHA-RELE
+        - RELE
+        - CAVALO
+        - BORNE
+        - CABEAMENTO
+        - FUSÍVEL
+      source: acionamentos
+      
+    - name: "Reconhecimento CCM-{painel}"
+      columns:
+        - NOMENCLATURA
+        - TIPO
+        - DESCRICAO
+        - CARTAO
+        - ANILHA-CARTAO
+        - BORNE
+        - FUSÍVEL
+      source: status
+      
+    - name: "Informações Especiais CCM-{painel}"
+      columns:
+        - INFORMACAO
+        - VALOR
+      source: info_especiais
+
+# =============================================================================
+# FORMATAÇÃO DO EXCEL
+# =============================================================================
+formatting:
+  header:
+    font:
+      bold: true
+      color: "FFFFFF"
+      size: 11
+    fill:
+      color: "366092"
+    alignment:
+      horizontal: "center"
+      vertical: "center"
+  
+  data:
+    font:
+      size: 10
+    alignment:
+      vertical: "center"
+    border:
+      style: "thin"
+      color: "000000"
+  
+  column_widths:
+    NOMENCLATURA: 18
+    TIPO: 12
+    DESCRICAO: 40
+    CARTAO: 15
+    ANILHA-CARTAO: 15
+    ANILHA-RELE: 15
+    RELE: 10
+    CAVALO: 10
+    BORNE: 10
+    CABEAMENTO: 22
+    FUSÍVEL: 12
+
+# =============================================================================
+# VALIDAÇÕES
+# =============================================================================
+validation:
+  required_fields:
+    acionamento:
+      - DESCRICAO
+    status:
+      - DESCRICAO
+  
+  warnings:
+    - field: CV
+      condition: "empty_for_motor"
+      message: "Motor sem CV definido"
+    - field: CARTAO
+      condition: "empty"
+      message: "Cartão não identificado"
+    - field: CABEAMENTO
+      condition: "empty_with_cv"
+      message: "Cabo não determinado mesmo com CV"
